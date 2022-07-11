@@ -2,7 +2,7 @@
 
 echo
 echo "----------- Building API Manager for environment '$1' Using Base Image '$3'----------- "
-tar xf APIGateway_7.7.20220228-DockerScripts-2.4.0.tar
+tar xf APIGateway_7.7.20220228-DockerScripts-2.4.0.tar-28.02.2022.tar
 
 # get the certificate from environment variable
 echo "${APIMANAGER_LICENSE}" | base64 -d >license.lic

@@ -4,7 +4,7 @@
 
 echo
 echo "----------- Building Admin Node Manager for environment '$1' ----------- "
-tar xf APIGateway_7.7.20220228-DockerScripts-2.4.0.tar
+tar xf APIGateway_7.7.20220228-DockerScripts-2.4.0.tar-28.02.2022.tar
 
 # get the certificate from environment variable
 echo "${APIGATEWAY_LICENSE}" | base64 -d >license.lic

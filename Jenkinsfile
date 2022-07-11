@@ -1,7 +1,7 @@
 release = '7_7_20220228'
-installerURL = "http://172.16.63.180:8081/repository/apim-releases/axway/api/management/installer/APIGateway_7.7.20220228_Install_linux-x86-64_BN02.run/28.02.2022/APIGateway_7.7.20220228_Install_linux-x86-64_BN02.run-28.02.2022.run"
-emtScriptsURL = "http://172.16.63.180:8081/repository/apim-releases/axway/api/management/emt/scripts/APIGateway_7.7.20220228-DockerScripts-2.4.0.tar/28.02.2022/APIGateway_7.7.20220228-DockerScripts-2.4.0.tar-28.02.2022.tar"
-portalEmtScriptsURL = "http://172.16.63.180:8081/repository/apim-releases/axway/api/management/emt/scripts/APIPortal_7.7.20220228_Docker_Samples_Package_linux-x86-64_BN724.tar/28.02.2022/APIPortal_7.7.20220228_Docker_Samples_Package_linux-x86-64_BN724.tar-28.02.2022.tar"
+installerURL = "https://nexus-np.bcthk.info/repository/apim-releases/axway/api/management/installer/APIGateway_7.7.20220228_Install_linux-x86-64_BN02.run/28.02.2022/APIGateway_7.7.20220228_Install_linux-x86-64_BN02.run-28.02.2022.run"
+emtScriptsURL = "https://nexus-np.bcthk.info/repository/apim-releases/axway/api/management/emt/scripts/APIGateway_7.7.20220228-DockerScripts-2.4.0.tar/28.02.2022/APIGateway_7.7.20220228-DockerScripts-2.4.0.tar-28.02.2022.tar"
+portalEmtScriptsURL = "https://nexus-np.bcthk.info/repository/apim-releases/axway/api/management/emt/scripts/APIPortal_7.7.20220228_Docker_linux-x86-64_BN724.tar/28.02.2022/APIPortal_7.7.20220228_Docker_linux-x86-64_BN724.tar-28.02.2022.tar"
 
 gitRepoProtocol = "http"
 gitRepo = "gitlab.asim.com/gitlab-instance-90f20ff9/sw-apim-images-all.git"
@@ -15,7 +15,7 @@ portalBuildConfig = [:]
 
 imageTag = ""
 targetEnvironment = 'dev'
-emailRecipient = "someone@sydneywater.com.au"
+emailRecipient = "wong.xanthus@bcthk.com"
 
 node {
     try {
@@ -26,15 +26,15 @@ node {
         buildANM().call()
         buildAPIMgr().call()
         buildPortal().call()
-        createLatestDockerTags().call()
-        pushReleaseDockerTags().call()
-        pushLatestDockerTags().call()
-        processHelmChart().call()
-        gitTag().call()
-        emailNotification().call()
-        clearWorkspace().call()
+        //createLatestDockerTags().call()
+        //pushReleaseDockerTags().call()
+        //pushLatestDockerTags().call()
+        //processHelmChart().call()
+        //gitTag().call()
+        //emailNotification().call()
+        //clearWorkspace().call()
     } catch (e) {
-        postFailure(e).call()
+        //postFailure(e).call()
         currentBuild.result = 'FAILURE'
     }
 }
@@ -127,7 +127,8 @@ def buildBaseImage() {
     return {
         stage('Build Base Image') {
             if (buildManifest.anm || buildManifest.apim) {
-                def status = sh returnStdout: true, script: "./build_base_image.sh ${imageTag} harbor.com /apim /apim_base && echo 'EMT base image build successfully!' || echo 'failed to build EMT base image!'", label: "Build Base Image"
+                //def status = sh returnStdout: true, script: "./build_base_image.sh ${imageTag} harbor.com /apim /apim_base && echo 'EMT base image build successfully!' || echo 'failed to build EMT base image!'", label: "Build Base Image"
+                def status = sh returnStdout: true, script: "Build Base Image '' && echo 'EMT base image build successfully!' || echo 'failed to build EMT base image!'", label: "Build Base Image"
                 echo "${status}"
                 if (status.contains("failed")) {
                     error status
@@ -145,7 +146,8 @@ def buildANM() {
     return {
         stage('Build ANM') {
             if (buildManifest.anm) {
-                def status = sh returnStdout: true, script: "./build_anm_image.sh ${targetEnvironment} ${imageTag} /apim_base:${imageTag} harbor.com /apim /apim_anm && echo 'Admin Node Manager image build successfully!' || echo 'failed to build Admin Node Manager image!'", label: "Build ANM"
+                //def status = sh returnStdout: true, script: "./build_anm_image.sh ${targetEnvironment} ${imageTag} /apim_base:${imageTag} harbor.com /apim /apim_anm && echo 'Admin Node Manager image build successfully!' || echo 'failed to build Admin Node Manager image!'", label: "Build ANM"
+                def status = sh returnStdout: true, script: "echo 'Build ANM' && echo 'Admin Node Manager image build successfully!' || echo 'failed to build Admin Node Manager image!'", label: "Build ANM"
                 echo "${status}"
                 if (status.contains("failed")) {
                     error status
@@ -163,7 +165,8 @@ def buildAPIMgr() {
     return {
         stage('Build APIMgr') {
             if (buildManifest.apim) {
-                def status = sh returnStdout: true, script: "./build_apimgr_image.sh ${targetEnvironment} ${imageTag} /apim_base:${imageTag} harbor.com /apim /apim_apimgr && echo 'API Manager image build successfully!' || echo 'failed to build API Manager image!'", label: "Build APIMgr"
+                //def status = sh returnStdout: true, script: "./build_apimgr_image.sh ${targetEnvironment} ${imageTag} /apim_base:${imageTag} harbor.com /apim /apim_apimgr && echo 'API Manager image build successfully!' || echo 'failed to build API Manager image!'", label: "Build APIMgr"
+                def status = sh returnStdout: true, script: "echo 'Build APIMgr' && echo 'API Manager image build successfully!' || echo 'failed to build API Manager image!'", label: "Build APIMgr"
                 echo "${status}"
                 if (status.contains("failed")) {
                     error status
@@ -189,7 +192,8 @@ def buildPortal() {
                 portalBuildConfig.mySqlUser = props['MYSQL_USER']
                 portalBuildConfig.mySqlPassword = props['MYSQL_PASSWORD']
 
-                def status = sh returnStdout: true, script: "./build_apim_portal_image.sh harbor.com /apim /apim_portal ${imageTag} ${portalBuildConfig.mySqlHost} ${portalBuildConfig.mySqlPort} ${portalBuildConfig.mySqlDatabase} ${portalBuildConfig.mySqlUser} ${portalBuildConfig.mySqlPassword} && echo 'API Portal image build successfully!' || echo 'failed to build API Portal image!'", label: "Build Portal"
+                //def status = sh returnStdout: true, script: "./build_apim_portal_image.sh harbor.com /apim /apim_portal ${imageTag} ${portalBuildConfig.mySqlHost} ${portalBuildConfig.mySqlPort} ${portalBuildConfig.mySqlDatabase} ${portalBuildConfig.mySqlUser} ${portalBuildConfig.mySqlPassword} && echo 'API Portal image build successfully!' || echo 'failed to build API Portal image!'", label: "Build Portal"
+                def status = sh returnStdout: true, script: "echo 'Build Portal' && echo 'API Portal image build successfully!' || echo 'failed to build API Portal image!'", label: "Build Portal"
                 echo "${status}"
                 if (status.contains("failed")) {
                     error status
@@ -209,7 +213,7 @@ def createLatestDockerTags() {
             parallel([
                     ANM   : {
                         if (buildManifest.anm) {
-                            sh "docker tag harbor.com/apim/apim_anm:${imageTag} harbor.com/apim/apim_anm:latest"
+                            //sh "docker tag harbor.com/apim/apim_anm:${imageTag} harbor.com/apim/apim_anm:latest"
                         } else {
                             catchError(buildResult: currentBuild.result, stageResult: 'UNSTABLE') {
                                 error "Skip creating anm latest tag!"
@@ -218,7 +222,7 @@ def createLatestDockerTags() {
                     },
                     APIMGR: {
                         if (buildManifest.apim) {
-                            sh "docker tag harbor.com/apim/apim_apimgr:${imageTag} harbor.com/apim/apim_apimgr:latest"
+                            //sh "docker tag harbor.com/apim/apim_apimgr:${imageTag} harbor.com/apim/apim_apimgr:latest"
                         } else {
                             catchError(buildResult: currentBuild.result, stageResult: 'UNSTABLE') {
                                 error "Skip creating apim latest tag!"
@@ -227,7 +231,7 @@ def createLatestDockerTags() {
                     },
                     PORTAL: {
                         if (buildManifest.portal) {
-                            sh "docker tag harbor.com/apim/apim_portal:${imageTag} harbor.com/apim/apim_portal:latest"
+                            //sh "docker tag harbor.com/apim/apim_portal:${imageTag} harbor.com/apim/apim_portal:latest"
                         } else {
                             catchError(buildResult: currentBuild.result, stageResult: 'UNSTABLE') {
                                 error "Skip creating portal latest tag!"

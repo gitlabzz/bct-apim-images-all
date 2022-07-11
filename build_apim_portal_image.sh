@@ -8,7 +8,7 @@
 echo
 echo "----------- Building API Portal Image ----------- "
 
-tar xf APIPortal_7.7.20220228_Docker_Samples_Package_linux-x86-64_BN724.tar-28.02.2022.tar
+tar xf APIPortal_7.7.20220228_Docker_linux-x86-64_BN724.tar-28.02.2022.tar
 mv apiportal-docker-* api_portal_build
 
 docker image build \
