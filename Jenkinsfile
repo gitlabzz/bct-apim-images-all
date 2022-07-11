@@ -416,7 +416,7 @@ def processHelmChart() {
                             if (buildManifest.containsValue(true)) {
                                 withCredentials([usernamePassword(credentialsId: 'userid-password-gitlab-root', passwordVariable: 'password', usernameVariable: 'username')]) {
                                     def encodedPassword = URLEncoder.encode("$password", 'UTF-8')
-                                    sh "git config user.email jenkins@sydneywater.com.au"
+                                    sh "git config user.email jenkins@bcthk.com"
                                     sh "git config user.name Jenkins"
                                     sh "cd apim-helm && " +
                                             "git add . && " +
@@ -445,7 +445,7 @@ def gitTag() {
                     withCredentials([usernamePassword(credentialsId: "userid-password-gitlab-root", passwordVariable: 'password', usernameVariable: 'username')]) {
                         def encodedPassword = URLEncoder.encode("$password", 'UTF-8')
                         sh("git config user.name 'Jenkins'")
-                        sh("git config user.email 'jenkins@sydneywater.com.au'")
+                        sh("git config user.email 'jenkins@bcthk.com'")
                         sh("git tag -a v${env.BUILD_NUMBER}_${targetEnvironment} -m 'For ${buildManifest} by Jenkins Job: ${env.JOB_NAME}; Build No. ${env.BUILD_NUMBER}'")
                         sh "git push ${gitRepoProtocol}://${username}:${encodedPassword}@${gitRepo} --tags"
                     }
@@ -458,7 +458,7 @@ def gitTag() {
 def emailNotification() {
     return {
         stage('Email Notification') {
-            mail(bcc: '', body: "Build ${env.BUILD_NUMBER} for ${env.JOB_NAME} successfully completed for ${buildManifest}.", cc: '', from: 'jenkins@sydneywater.com.au', replyTo: '', subject: "Build ${env.BUILD_NUMBER} for ${env.JOB_NAME} completed successfully.", to: emailRecipient)
+            mail(bcc: '', body: "Build ${env.BUILD_NUMBER} for ${env.JOB_NAME} successfully completed for ${buildManifest}.", cc: '', from: 'jenkins@bcthk.com', replyTo: '', subject: "Build ${env.BUILD_NUMBER} for ${env.JOB_NAME} completed successfully.", to: emailRecipient)
         }
     }
 }
@@ -476,7 +476,7 @@ def postFailure(e) {
     println "Failed because of $e"
     return {
         stage('Email') {
-            mail(bcc: '', body: "Build ${env.BUILD_NUMBER} for ${env.JOB_NAME} failed ${e.message}.", cc: '', from: 'jenkins@sydneywater.com.au', replyTo: '', subject: "Build ${env.BUILD_NUMBER} for ${env.JOB_NAME} failed.", to: emailRecipient)
+            mail(bcc: '', body: "Build ${env.BUILD_NUMBER} for ${env.JOB_NAME} failed ${e.message}.", cc: '', from: 'jenkins@bcthk.com', replyTo: '', subject: "Build ${env.BUILD_NUMBER} for ${env.JOB_NAME} failed.", to: emailRecipient)
         }
     }
 }
